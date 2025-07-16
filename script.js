@@ -6,6 +6,7 @@ class BabyWiseApp {
         this.recordingTimeout = null;
         this.callActive = false;
         this.isMuted = false;
+        this.cameraEnabled = true;
         
         this.init();
     }
@@ -371,9 +372,19 @@ class BabyWiseApp {
     startCall() {
         if (!this.callActive) {
             const videoStatus = Utils.dom.getElementById('videoStatus');
+            const callBtn = Utils.dom.getElementById('callBtn');
+            const callIcon = callBtn.querySelector('.btn-icon');
+            const callLabel = callBtn.querySelector('.btn-label');
+            
             if (videoStatus) {
                 videoStatus.textContent = '📹 Connected to AI Nurse Assistant';
                 this.callActive = true;
+                
+                // Update call button state
+                Utils.dom.addClass(callBtn, 'calling');
+                callIcon.textContent = '📞';
+                callLabel.textContent = 'Connected';
+                
                 setTimeout(() => {
                     videoStatus.textContent = '🤖 How can I help you today?';
                 }, 2000);
@@ -383,9 +394,19 @@ class BabyWiseApp {
     
     endCall() {
         const videoStatus = Utils.dom.getElementById('videoStatus');
+        const callBtn = Utils.dom.getElementById('callBtn');
+        const callIcon = callBtn.querySelector('.btn-icon');
+        const callLabel = callBtn.querySelector('.btn-label');
+        
         if (videoStatus) {
             videoStatus.textContent = '📹 Call ended';
             this.callActive = false;
+            
+            // Reset call button state
+            Utils.dom.removeClass(callBtn, 'calling');
+            callIcon.textContent = '📞';
+            callLabel.textContent = 'Call';
+            
             setTimeout(() => {
                 videoStatus.textContent = '📹 Tap to start video consultation';
             }, 2000);
@@ -394,9 +415,35 @@ class BabyWiseApp {
     
     toggleMute() {
         this.isMuted = !this.isMuted;
-        const muteButton = Utils.dom.querySelector('.video-btn.mute');
-        if (muteButton) {
-            muteButton.textContent = this.isMuted ? '🔇' : '🎤';
+        const muteBtn = Utils.dom.getElementById('muteBtn');
+        const muteIcon = muteBtn.querySelector('.btn-icon');
+        const muteLabel = muteBtn.querySelector('.btn-label');
+        
+        if (this.isMuted) {
+            Utils.dom.addClass(muteBtn, 'muted');
+            muteIcon.textContent = '🔇';
+            muteLabel.textContent = 'Muted';
+        } else {
+            Utils.dom.removeClass(muteBtn, 'muted');
+            muteIcon.textContent = '🎤';
+            muteLabel.textContent = 'Mute';
+        }
+    }
+    
+    toggleCamera() {
+        this.cameraEnabled = !this.cameraEnabled;
+        const cameraBtn = Utils.dom.getElementById('cameraBtn');
+        const cameraIcon = cameraBtn.querySelector('.btn-icon');
+        const cameraLabel = cameraBtn.querySelector('.btn-label');
+        
+        if (this.cameraEnabled) {
+            Utils.dom.removeClass(cameraBtn, 'disabled');
+            cameraIcon.textContent = '📹';
+            cameraLabel.textContent = 'Camera';
+        } else {
+            Utils.dom.addClass(cameraBtn, 'disabled');
+            cameraIcon.textContent = '📷';
+            cameraLabel.textContent = 'Off';
         }
     }
     
@@ -523,6 +570,10 @@ function endCall() {
 
 function toggleMute() {
     app.toggleMute();
+}
+
+function toggleCamera() {
+    app.toggleCamera();
 }
 
 function showTrackerTab(tab) {
