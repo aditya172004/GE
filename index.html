@@ -124,11 +124,31 @@
                 <!-- Video Call Page -->
                 <div class="page" id="videoCallPage">
                     <div class="video-call-container">
-                        <div id="videoStatus">📹 Tap to start video consultation</div>
+                        <div class="video-content">
+                            <div class="video-placeholder">
+                                <div class="video-placeholder-icon">👤</div>
+                                <div class="video-placeholder-text">AI Nurse Assistant</div>
+                            </div>
+                            <div class="video-status" id="videoStatus">📹 Tap to start video consultation</div>
+                        </div>
+                        
                         <div class="video-controls">
-                            <button class="video-btn call" onclick="startCall()">📞</button>
-                            <button class="video-btn mute" onclick="toggleMute()">🎤</button>
-                            <button class="video-btn end" onclick="endCall()">📵</button>
+                            <button class="video-btn camera" onclick="toggleCamera()" id="cameraBtn" title="Toggle Camera">
+                                <span class="btn-icon">📹</span>
+                                <span class="btn-label">Camera</span>
+                            </button>
+                            <button class="video-btn mute" onclick="toggleMute()" id="muteBtn" title="Toggle Mute">
+                                <span class="btn-icon">🎤</span>
+                                <span class="btn-label">Mute</span>
+                            </button>
+                            <button class="video-btn call" onclick="startCall()" id="callBtn" title="Start Call">
+                                <span class="btn-icon">📞</span>
+                                <span class="btn-label">Call</span>
+                            </button>
+                            <button class="video-btn end" onclick="endCall()" id="endBtn" title="End Call">
+                                <span class="btn-icon">📵</span>
+                                <span class="btn-label">End</span>
+                            </button>
                         </div>
                     </div>
                     
