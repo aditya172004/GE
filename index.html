@@ -137,10 +137,27 @@
                 <div class="page" id="videoCallPage">
                     <div class="video-call-container">
                         <div class="video-content">
-                            <div class="video-placeholder">
+                            <div class="video-placeholder" id="videoPlaceholder">
                                 <div class="video-placeholder-icon">👩‍⚕️</div>
                                 <div class="video-placeholder-text">AI Nurse Assistant</div>
                             </div>
+                            
+                            <!-- Baby Rash Demo Content -->
+                            <div class="rash-demo-content hidden" id="rashDemoContent">
+                                <div class="baby-image-container">
+                                    <div class="baby-image">👶</div>
+                                    <div class="rash-indicator rash-left">🔴</div>
+                                    <div class="rash-indicator rash-right">🔴</div>
+                                    <div class="demo-label">Baby with red rashes on cheeks</div>
+                                </div>
+                                <div class="ai-response-container">
+                                    <div class="ai-nurse-icon">👩‍⚕️</div>
+                                    <div class="ai-response-text" id="aiResponse">
+                                        I can see red rashes on your baby's cheeks. This could be eczema, contact dermatitis, or heat rash. Let me provide you with some guidance.
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="video-status" id="videoStatus">👩‍⚕️ Tap to start video consultation</div>
                         </div>
                         
@@ -167,6 +184,16 @@
                     <div class="feature-card" style="margin: 20px;">
                         <div class="feature-title">AI Nurse Assistant</div>
                         <div class="feature-description">Get instant medical guidance for your baby. If the AI is uncertain, it will recommend nearby healthcare facilities based on cost and distance.</div>
+                    </div>
+                    
+                    <!-- Demo Scenario Section -->
+                    <div class="feature-card" style="margin: 20px;">
+                        <div class="feature-title">Demo: Baby Skin Rash Consultation</div>
+                        <div class="feature-description">See how AI consultation works with a real example</div>
+                        <div style="margin-top: 10px;">
+                            <button class="upload-btn" onclick="showRashDemo()" id="startDemoBtn">👶 Start Rash Demo</button>
+                            <button class="upload-btn hidden" onclick="resetDemo()" id="resetDemoBtn" style="background: #ff6b6b; margin-left: 10px;">🔄 Reset Demo</button>
+                        </div>
                     </div>
                 </div>
 

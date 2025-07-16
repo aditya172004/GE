@@ -465,6 +465,97 @@ class BabyWiseApp {
         }
     }
     
+    // Baby Rash Demo Function
+    showRashDemo() {
+        const placeholder = Utils.dom.getElementById('videoPlaceholder');
+        const demoContent = Utils.dom.getElementById('rashDemoContent');
+        const videoStatus = Utils.dom.getElementById('videoStatus');
+        const startBtn = Utils.dom.getElementById('startDemoBtn');
+        const resetBtn = Utils.dom.getElementById('resetDemoBtn');
+        
+        if (placeholder && demoContent && videoStatus) {
+            // Hide placeholder and show demo content
+            Utils.dom.addClass(placeholder, 'hidden');
+            Utils.dom.removeClass(demoContent, 'hidden');
+            Utils.dom.addClass(demoContent, 'show');
+            
+            // Toggle buttons
+            Utils.dom.addClass(startBtn, 'hidden');
+            Utils.dom.removeClass(resetBtn, 'hidden');
+            
+            // Update video status
+            videoStatus.textContent = '👩‍⚕️ Analyzing baby\'s skin condition...';
+            
+            // Simulate AI analysis progression
+            setTimeout(() => {
+                videoStatus.textContent = '🔍 Skin rash detected on both cheeks';
+                this.showRashGuidance();
+            }, 2000);
+            
+            setTimeout(() => {
+                videoStatus.textContent = '👩‍⚕️ Providing treatment recommendations';
+            }, 4000);
+        }
+    }
+    
+    resetDemo() {
+        const placeholder = Utils.dom.getElementById('videoPlaceholder');
+        const demoContent = Utils.dom.getElementById('rashDemoContent');
+        const videoStatus = Utils.dom.getElementById('videoStatus');
+        const startBtn = Utils.dom.getElementById('startDemoBtn');
+        const resetBtn = Utils.dom.getElementById('resetDemoBtn');
+        const responseText = Utils.dom.getElementById('aiResponse');
+        
+        if (placeholder && demoContent && videoStatus) {
+            // Show placeholder and hide demo content
+            Utils.dom.removeClass(placeholder, 'hidden');
+            Utils.dom.addClass(demoContent, 'hidden');
+            Utils.dom.removeClass(demoContent, 'show');
+            
+            // Toggle buttons
+            Utils.dom.removeClass(startBtn, 'hidden');
+            Utils.dom.addClass(resetBtn, 'hidden');
+            
+            // Reset video status
+            videoStatus.textContent = '👩‍⚕️ Tap to start video consultation';
+            
+            // Reset AI response
+            if (responseText) {
+                responseText.textContent = 'I can see red rashes on your baby\'s cheeks. This could be eczema, contact dermatitis, or heat rash. Let me provide you with some guidance.';
+            }
+        }
+    }
+    
+    showRashGuidance() {
+        const responseText = Utils.dom.getElementById('aiResponse');
+        if (responseText) {
+            responseText.innerHTML = `
+                <div class="guidance-steps">
+                    <div class="guidance-step">
+                        <span class="guidance-step-number">1.</span>
+                        <strong>Immediate care:</strong> Gently clean the affected area with lukewarm water and pat dry
+                    </div>
+                    <div class="guidance-step">
+                        <span class="guidance-step-number">2.</span>
+                        <strong>Avoid irritants:</strong> Check for new soaps, lotions, or fabrics that might have caused the rash
+                    </div>
+                    <div class="guidance-step">
+                        <span class="guidance-step-number">3.</span>
+                        <strong>Monitor symptoms:</strong> Watch for spreading, fever, or worsening condition
+                    </div>
+                    <div class="guidance-step">
+                        <span class="guidance-step-number">4.</span>
+                        <strong>When to seek help:</strong> If rash persists for more than 24 hours or baby shows signs of discomfort
+                    </div>
+                    <div class="guidance-step">
+                        <span class="guidance-step-number">5.</span>
+                        <strong>Emergency signs:</strong> Seek immediate medical attention if there's fever, pus, or severe swelling
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
     // Health Tracker Functions
     showTrackerTab(tab) {
         Utils.dom.querySelectorAll('.tracker-tab').forEach(t => Utils.dom.removeClass(t, 'active'));
@@ -597,6 +688,14 @@ function toggleMute() {
 
 function toggleCamera() {
     app.toggleCamera();
+}
+
+function showRashDemo() {
+    app.showRashDemo();
+}
+
+function resetDemo() {
+    app.resetDemo();
 }
 
 function showTrackerTab(tab) {

@@ -246,6 +246,33 @@ const CONFIG = {
         description: 'Emergency medical services'
     },
 
+    // Baby rash consultation demo data
+    rashDemo: {
+        title: 'Baby Skin Rash Analysis',
+        description: 'AI-powered skin condition assessment',
+        possibleCauses: [
+            'Eczema (atopic dermatitis)',
+            'Contact dermatitis',
+            'Heat rash (miliaria)',
+            'Seborrheic dermatitis',
+            'Allergic reaction'
+        ],
+        immediateSteps: [
+            'Gently clean the affected area with lukewarm water and pat dry',
+            'Check for new soaps, lotions, or fabrics that might have caused the rash',
+            'Watch for spreading, fever, or worsening condition',
+            'If rash persists for more than 24 hours or baby shows signs of discomfort',
+            'Seek immediate medical attention if there\'s fever, pus, or severe swelling'
+        ],
+        emergencySignals: [
+            'High fever (above 101°F/38.3°C)',
+            'Widespread rash covering large body areas',
+            'Pus or fluid drainage',
+            'Difficulty breathing or swallowing',
+            'Severe swelling or blistering'
+        ]
+    },
+
     // Health Reports dummy data
     healthReports: [
         {
