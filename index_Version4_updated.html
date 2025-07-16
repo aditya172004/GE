@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BabyWise - AI Parenting Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 36px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .battery-icon {
+            width: 24px;
+            height: 12px;
+            border: 1px solid white;
+            border-radius: 2px;
+            position: relative;
+            margin-left: 4px;
+        }
+
+        .battery-level {
+            width: 90%;
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 1px;
+        }
+
+        .battery-tip {
+            width: 2px;
+            height: 6px;
+            background: white;
+            position: absolute;
+            right: -3px;
+            top: 3px;
+            border-radius: 0 1px 1px 0;
+        }
+
+        .signal-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            margin-right: 4px;
+        }
+
+        .signal-bar {
+            width: 3px;
+            background: white;
+            border-radius: 1px;
+        }
+
+        .signal-bar:nth-child(1) { height: 4px; }
+        .signal-bar:nth-child(2) { height: 6px; }
+        .signal-bar:nth-child(3) { height: 8px; }
+        .signal-bar:nth-child(4) { height: 10px; }
+
+        .app-header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .app-header.hidden {
+            display: none;
+        }
+
+        .app-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            background: #f8f9fa;
+            position: relative;
+        }
+
+        .navigation {
+            display: flex;
+            background: #fff;
+            border-top: 1px solid #e8e8e8;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 10px 5px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item.active {
+            color: #ff6b6b;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            border-radius: 0 0 2px 2px;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .page {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #ff9a9e;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .chat-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .chat-header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .chat-header-subtitle {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message.ai {
+            background: white;
+            color: #333;
+            align-self: flex-start;
+            border: 1px solid #e8e8e8;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .message-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .message-row.user {
+            justify-content: flex-end;
+        }
+
+        .ai-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            min-width: 32px;
+            box-shadow: 0 2px 8px rgba(255, 154, 158, 0.3);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid #e8e8e8;
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .quick-action {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 154, 158, 0.3);
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #e8e8e8;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .input-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 1px solid #e8e8e8;
+            border-radius: 25px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-container:focus-within {
+            border-color: #ff6b6b;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        .input-field {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+            color: #333;
+        }
+
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .input-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .input-icon:hover {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        .input-icon.active {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .send-button {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 20px;
+            max-width: 80px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #ccc;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .video-call-container {
+            background: #000;
+            height: 300px;
+            border-radius: 15px;
+            margin: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .video-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-btn.call {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .video-btn.end {
+            background: #f44336;
+            color: white;
+        }
+
+        .video-btn.mute {
+            background: #2196F3;
+            color: white;
+        }
+
+        .tracker-section {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .tracker-tabs {
+            display: flex;
+            border-bottom: 1px solid #e8e8e8;
+            margin-bottom: 20px;
+        }
+
+        .tracker-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .tracker-tab.active {
+            color: #ff6b6b;
+            border-bottom: 2px solid #ff6b6b;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .milestone-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .milestone-content {
+            flex: 1;
+        }
+
+        .milestone-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .milestone-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .milestone-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .milestone-status.completed {
+            background: #e8f5e8;
+            color: #4CAF50;
+        }
+
+        .milestone-status.pending {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        .cry-decoder {
+            padding: 20px;
+        }
+
+        .cry-upload {
+            text-align: center;
+            padding: 40px;
+            border: 2px dashed #e8e8e8;
+            border-radius: 15px;
+            margin: 20px;
+            background: white;
+        }
+
+        .cry-upload-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .community-post {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 20px;
+            border-top: 1px solid #e8e8e8;
+            padding-top: 15px;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .post-action:hover {
+            color: #ff6b6b;
+        }
+
+        .scheme-card {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+
+        .scheme-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .scheme-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .scheme-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scheme-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .profile-section {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 15px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .profile-subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .profile-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e8e8e8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-option:hover {
+            background: #f8f9fa;
+        }
+
+        .profile-option:last-child {
+            border-bottom: none;
+        }
+
+        .profile-option-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .profile-option-text {
+            flex: 1;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .profile-option-arrow {
+            color: #888;
+        }
+
+        /* File upload styles */
+        .file-input {
+            display: none;
+        }
+
+        /* Voice recording indicator */
+        .voice-recording {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .voice-recording.active {
+            display: block;
+        }
+
+        .recording-animation {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            margin: 0 auto 10px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen">
+            <div class="status-bar">
+                <div class="status-left">
+                    <span>9:41</span>
+                </div>
+                <div class="status-center">
+                    <span>BabyWise</span>
+                </div>
+                <div class="status-right">
+                    <div class="signal-bars">
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                    </div>
+                    <span>100%</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                        <div class="battery-tip"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-header" id="appHeader">
+                <div class="app-title">BabyWise AI</div>
+                <div class="app-subtitle">Your smart parenting companion</div>
+            </div>
+
+            <div class="content-area">
+                <!-- Home Page -->
+                <div class="page active" id="homePage">
+                    <div class="feature-grid">
+                        <div class="feature-card" onclick="showChatBot()">
+                            <div class="feature-icon">💬</div>
+                            <div class="feature-title">AI Chat</div>
+                            <div class="feature-description">Get instant answers to your parenting questions</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showVideoCall()">
+                            <div class="feature-icon">📹</div>
+                            <div class="feature-title">Video Consult</div>
+                            <div class="feature-description">Instant video consultation with AI nurse</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showHealthTracker()">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-title">Health Tracker</div>
+                            <div class="feature-description">Track baby's growth and milestones</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showCryDecoder()">
+                            <div class="feature-icon">🍼</div>
+                            <div class="feature-title">Cry Decoder</div>
+                            <div class="feature-description">Understand what your baby needs</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showCommunity()">
+                            <div class="feature-icon">👥</div>
+                            <div class="feature-title">Community</div>
+                            <div class="feature-description">Connect with other parents</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showSchemes()">
+                            <div class="feature-icon">🏛️</div>
+                            <div class="feature-title">Gov Schemes</div>
+                            <div class="feature-description">Available government benefits</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Page -->
+                <div class="page" id="chatPage">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div>
+                                <div class="chat-header-title">AI Assistant</div>
+                                <div class="chat-header-subtitle">Online • Ready to help</div>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="quickChat('Sleep Help')">😴 Sleep Help</div>
+                            <div class="quick-action" onclick="quickChat('Feeding Guide')">🍼 Feeding Guide</div>
+                            <div class="quick-action" onclick="quickChat('Development')">👶 Development</div>
+                            <div class="quick-action" onclick="quickChat('Emergency')">🚨 Emergency</div>
+                        </div>
+
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message-row">
+                                <div class="ai-avatar">🤖</div>
+                                <div class="message ai">
+                                    Hi! I'm your AI parenting assistant. I'm here to help with any questions about your baby's care, development, or health. How can I assist you today?
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input">
+                            <div class="input-container">
+                                <input type="text" class="input-field" placeholder="Ask me anything about your baby..." id="messageInput">
+                                <div class="input-actions">
+                                    <button class="input-icon" onclick="handleFileUpload()" title="Upload file">
+                                        📎
+                                    </button>
+                                    <button class="input-icon" onclick="handleVoiceInput()" title="Voice input" id="voiceButton">
+                                        🎤
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="send-button" onclick="sendMessage()">➤</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Call Page -->
+                <div class="page" id="videoCallPage">
+                    <div class="video-call-container">
+                        <div id="videoStatus">📹 Tap to start video consultation</div>
+                        <div class="video-controls">
+                            <button class="video-btn call" onclick="startCall()">📞</button>
+                            <button class="video-btn mute" onclick="toggleMute()">🎤</button>
+                            <button class="video-btn end" onclick="endCall()">📵</button>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" style="margin: 20px;">
+                        <div class="feature-title">AI Nurse Assistant</div>
+                        <div class="feature-description">Get instant medical guidance for your baby. If the AI is uncertain, it will recommend nearby healthcare facilities based on cost and distance.</div>
+                    </div>
+                </div>
+
+                <!-- Health Tracker Page -->
+                <div class="page" id="healthTrackerPage">
+                    <div class="tracker-section">
+                        <div class="tracker-tabs">
+                            <div class="tracker-tab active" onclick="showTrackerTab('baby')">Baby</div>
+                            <div class="tracker-tab" onclick="showTrackerTab('mother')">Mother</div>
+                        </div>
+                        
+                        <div id="babyTracker" class="tracker-content">
+                            <div class="milestone-item">
+                                <div class="milestone-icon">🍼</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">First Feeding</div>
+                                    <div class="milestone-description">Track feeding times and amounts</div>
+                                </div>
+                                <div class="milestone-status completed">Completed</div>
+                            </div>
+                            
+                            <div class="milestone-item">
+                                <div class="milestone-icon">😴</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Sleep Pattern</div>
+                                    <div class="milestone-description">Monitor sleep cycles and duration</div>
+                                </div>
+                                <div class="milestone-status pending">Pending</div>
+                            </div>
+                            
+                            <div class="milestone-item">
+                                <div class="milestone-icon">💉</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Vaccination</div>
+                                    <div class="milestone-description">Next: DPT vaccine due in 2 weeks</div>
+                                </div>
+                                <div class="milestone-status pending">Scheduled</div>
+                            </div>
+                        </div>
+                        
+                        <div id="motherTracker" class="tracker-content hidden">
+                            <div class="milestone-item">
+                                <div class="milestone-icon">🥗</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Nutrition</div>
+                                    <div class="milestone-description">Daily nutritional requirements</div>
+                                </div>
+                                <div class="milestone-status completed">On Track</div>
+                            </div>
+                            
+                            <div class="milestone-item">
+                                <div class="milestone-icon">🧘</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Exercise</div>
+                                    <div class="milestone-description">Postpartum recovery exercises</div>
+                                </div>
+                                <div class="milestone-status pending">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cry Decoder Page -->
+                <div class="page" id="cryDecoderPage">
+                    <div class="cry-decoder">
+                        <div class="cry-upload">
+                            <div class="cry-upload-icon">🎵</div>
+                            <h3>Baby Cry Decoder</h3>
+                            <p>Upload or record your baby's cry to understand what they need</p>
+                            <div style="margin-top: 20px;">
+                                <button class="upload-btn" onclick="recordCry()">🎤 Record Cry</button>
+                                <button class="upload-btn" onclick="uploadCry()">📁 Upload Audio</button>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card" style="margin: 20px 0;">
+                            <div class="feature-title">Recent Analysis</div>
+                            <div class="feature-description">
+                                <strong>Hunger Cry detected</strong><br>
+                                Your baby seems to be hungry. Try feeding them.
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card" style="margin: 20px 0;">
+                            <div class="feature-title">Emergency Alert</div>
+                            <div class="feature-description">
+                                If urgent issues are detected, nearby health centers will be notified automatically.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Page -->
+                <div class="page" id="communityPage">
+                    <div class="community-post">
+                        <div class="post-header">
+                            <div class="post-avatar">👩</div>
+                            <div class="post-info">
+                                <div class="post-author">Priya Sharma</div>
+                                <div class="post-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            My 8-month-old finally started crawling! So exciting to see these milestones. Any tips for baby-proofing the house?
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">❤️ 12 likes</div>
+                            <div class="post-action">💬 5 comments</div>
+                            <div class="post-action">🔄 Share</div>
+                        </div>
+                    </div>
+                    
+                    <div class="community-post">
+                        <div class="post-header">
+                            <div class="post-avatar">👨</div>
+                            <div class="post-info">
+                                <div class="post-author">Raj Patel</div>
+                                <div class="post-time">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            सहारा आंगनवाड़ी केंद्र में निःशुल्क टीकाकरण शिविर आयोजित किया गया। सभी माताओं को इसका लाभ उठाना चाहिए।
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">❤️ 8 likes</div>
+                            <div class="post-action">💬 3 comments</div>
+                            <div class="post-action">🔄 Share</div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" style="margin: 20px; text-align: center;">
+                        <button class="upload-btn" onclick="shareExperience()">🎤 Share Your Experience</button>
+                    </div>
+                </div>
+
+                <!-- Government Schemes Page -->
+                <div class="page" id="schemesPage">
+                    <div class="scheme-card">
+                        <div class="scheme-title">Pradhan Mantri Matru Vandana Yojana</div>
+                        <div class="scheme-description">
+                            Cash incentive of ₹5,000 for pregnant and lactating mothers for the first living child.
+                        </div>
+                        <button class="scheme-btn" onclick="applyScheme('PMMVY')">Apply Now</button>
+                    </div>
+                    
+                    <div class="scheme-card">
+                        <div class="scheme-title">Janani Suraksha Yojana</div>
+                        <div class="scheme-description">
+                            Cash assistance for institutional delivery and transportation support.
+                        </div>
+                        <button class="scheme-btn" onclick="applyScheme('JSY')">Apply Now</button>
+                    </div>
+                    
+                    <div class="scheme-card">
+                        <div class="scheme-title">Anganwadi Services</div>
+                        <div class="scheme-description">
+                            Free immunization, health check-ups, and nutrition services at nearby centers.
+                        </div>
+                        <button class="scheme-btn" onclick="findCenter()">Find Center</button>
+                    </div>
+                    
+                    <div class="scheme-card">
+                        <div class="scheme-title">Poshan Abhiyaan</div>
+                        <div class="scheme-description">
+                            National nutrition mission providing supplementary nutrition for children and mothers.
+                        </div>
+                        <button class="scheme-btn" onclick="applyScheme('POSHAN')">Learn More</button>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div class="page" id="profilePage">
+                    <div class="profile-section">
+                        <div class="profile-header">
+                            <div class="profile-avatar">👤</div>
+                            <div class="profile-name">Welcome User</div>
+                            <div class="profile-subtitle">Parent of a 6-month-old</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="editProfile()">
+                            <div class="profile-option-icon">✏️</div>
+                            <div class="profile-option-text">Edit Profile</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="babyProfile()">
+                            <div class="profile-option-icon">👶</div>
+                            <div class="profile-option-text">Baby Profile</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="healthReports()">
+                            <div class="profile-option-icon">📄</div>
+                            <div class="profile-option-text">Health Reports</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="languageSettings()">
+                            <div class="profile-option-icon">🌍</div>
+                            <div class="profile-option-text">Language Settings</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="notifications()">
+                            <div class="profile-option-icon">🔔</div>
+                            <div class="profile-option-text">Notifications</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="helpSupport()">
+                            <div class="profile-option-icon">❓</div>
+                            <div class="profile-option-text">Help & Support</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="navigation">
+                <div class="nav-item active" onclick="showPage('home')">
+                    <div class="nav-icon">🏠</div>
+                    <div>Home</div>
+                </div>
+                <div class="nav-item" onclick="showPage('chat')">
+                    <div class="nav-icon">💬</div>
+                    <div>Chat</div>
+                </div>
+                <div class="nav-item" onclick="showPage('healthTracker')">
+                    <div class="nav-icon">📊</div>
+                    <div>Tracker</div>
+                </div>
+                <div class="nav-item" onclick="showPage('community')">
+                    <div class="nav-icon">👥</div>
+                    <div>Community</div>
+                </div>
+                <div class="nav-item" onclick="showPage('profile')">
+                    <div class="nav-icon">👤</div>
+                    <div>Profile</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Recording Indicator -->
+    <div class="voice-recording" id="voiceRecording">
+        <div class="recording-animation"></div>
+        <div>Recording...</div>
+        <div style="font-size: 12px; margin-top: 5px;">Tap to stop</div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" class="file-input" accept="image/*,audio/*,.pdf,.doc,.docx" multiple>
+
+    <script>
+        // Voice recording state
+        let isRecording = false;
+        let mediaRecorder;
+        let recordingTimeout;
+
+        // Function to show/hide header based on page
+        function toggleHeader(isHomePage) {
+            const header = document.getElementById('appHeader');
+            if (isHomePage) {
+                header.classList.remove('hidden');
+            } else {
+                header.classList.add('hidden');
+            }
+        }
+
+        // Page Navigation
+        function showPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(page + 'Page').classList.add('active');
+            
+            // Toggle header visibility
+            toggleHeader(page === 'home');
+            
+            // Update active nav item
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        // Feature Navigation
+        function showChatBot() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('chatPage').classList.add('active');
+            document.querySelectorAll('.nav-item')[1].classList.add('active');
+            toggleHeader(false);
+        }
+
+        function showVideoCall() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('videoCallPage').classList.add('active');
+            toggleHeader(false);
+        }
+
+        function showHealthTracker() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('healthTrackerPage').classList.add('active');
+            document.querySelectorAll('.nav-item')[2].classList.add('active');
+            toggleHeader(false);
+        }
+
+        function showCryDecoder() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('cryDecoderPage').classList.add('active');
+            toggleHeader(false);
+        }
+
+        function showCommunity() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('communityPage').classList.add('active');
+            document.querySelectorAll('.nav-item')[3].classList.add('active');
+            toggleHeader(false);
+        }
+
+        function showSchemes() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('schemesPage').classList.add('active');
+            toggleHeader(false);
+        }
+
+        // File Upload Handler
+        function handleFileUpload() {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.click();
+        }
+
+        // Handle file selection
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileName = file.name;
+                    const fileType = file.type;
+                    
+                    // Add file message to chat
+                    let fileIcon = '📄';
+                    if (fileType.startsWith('image/')) {
+                        fileIcon = '🖼️';
+                    } else if (fileType.startsWith('audio/')) {
+                        fileIcon = '🎵';
+                    } else if (fileType.includes('pdf')) {
+                        fileIcon = '📄';
+                    }
+                    
+                    addMessage(`${fileIcon} Uploaded: ${fileName}`, 'user');
+                }
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    addTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        addMessage("I've received your file(s). How can I help you with this?", 'ai');
+                    }, 2000);
+                }, 500);
+            }
+            
+            // Clear the input
+            e.target.value = '';
+        });
+
+        // Voice Input Handler
+        function handleVoiceInput() {
+            const voiceButton = document.getElementById('voiceButton');
+            const voiceRecording = document.getElementById('voiceRecording');
+            
+            if (!isRecording) {
+                startVoiceRecording();
+            } else {
+                stopVoiceRecording();
+            }
+        }
+
+        function startVoiceRecording() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        isRecording = true;
+                        const voiceButton = document.getElementById('voiceButton');
+                        const voiceRecording = document.getElementById('voiceRecording');
+                        
+                        voiceButton.classList.add('active');
+                        voiceRecording.classList.add('active');
+                        
+                        // Set up MediaRecorder
+                        mediaRecorder = new MediaRecorder(stream);
+                        
+                        mediaRecorder.ondataavailable = function(e) {
+                            // In a real app, you would process the audio data here
+                            console.log('Audio data available:', e.data);
+                        };
+                        
+                        mediaRecorder.onstop = function() {
+                            stream.getTracks().forEach(track => track.stop());
+                        };
+                        
+                        mediaRecorder.start();
+                        
+                        // Auto-stop after 30 seconds
+                        recordingTimeout = setTimeout(() => {
+                            if (isRecording) {
+                                stopVoiceRecording();
+                            }
+                        }, 30000);
+                    })
+                    .catch(err => {
+                        console.error('Error accessing microphone:', err);
+                        alert('Unable to access microphone. Please check permissions.');
+                    });
+            } else {
+                alert('Voice recording not supported in this browser.');
+            }
+        }
+
+        function stopVoiceRecording() {
+            if (isRecording) {
+                isRecording = false;
+                const voiceButton = document.getElementById('voiceButton');
+                const voiceRecording = document.getElementById('voiceRecording');
+                
+                voiceButton.classList.remove('active');
+                voiceRecording.classList.remove('active');
+                
+                if (mediaRecorder) {
+                    mediaRecorder.stop();
+                }
+                
+                if (recordingTimeout) {
+                    clearTimeout(recordingTimeout);
+                }
+                
+                // Simulate voice-to-text conversion
+                setTimeout(() => {
+                    addMessage("🎤 Voice message: How can I help my baby sleep better?", 'user');
+                    
+                    // Simulate AI response
+                    setTimeout(() => {
+                        addTypingIndicator();
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            addMessage("I heard your question about helping your baby sleep better. Here are some gentle techniques you can try...", 'ai');
+                        }, 2000);
+                    }, 500);
+                }, 1000);
+            }
+        }
+
+        // Click voice recording to stop
+        document.getElementById('voiceRecording').addEventListener('click', function() {
+            if (isRecording) {
+                stopVoiceRecording();
+            }
+        });
+
+        // Chat Functionality
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate AI typing
+                setTimeout(() => {
+                    addTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        addAIResponse(message);
+                    }, 2000);
+                }, 500);
+            }
+        }
+        
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageRow = document.createElement('div');
+            messageRow.className = `message-row ${sender}`;
+            
+            if (sender === 'ai') {
+                messageRow.innerHTML = `
+                    <div class="ai-avatar">🤖</div>
+                    <div class="message ai">${text}</div>
+                `;
+            } else {
+                messageRow.innerHTML = `
+                    <div class="message user">${text}</div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageRow);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingRow = document.createElement('div');
+            typingRow.className = 'message-row typing-row';
+            typingRow.innerHTML = `
+                <div class="ai-avatar">🤖</div>
+                <div class="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(typingRow);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingRow = document.querySelector('.typing-row');
+            if (typingRow) {
+                typingRow.remove();
+            }
+        }
+        
+        function addAIResponse(userMessage) {
+            const responses = {
+                'Sleep Help': "Here are some gentle sleep training methods:\n\n• **Ferber Method**: Progressive waiting periods\n• **Chair Method**: Gradual distance increase\n• **No Tears Method**: Gentle, comfort-focused approach\n\nEach method works differently for different babies. What feels right for your parenting style?",
+                'Feeding Guide': "Feeding guidelines for your baby:\n\n• **0-6 months**: Exclusive breastfeeding\n• **6+ months**: Introduce solid foods gradually\n• **Signs of hunger**: Rooting, sucking motions\n• **Feeding frequency**: Every 2-3 hours\n\nWould you like specific advice for your baby's age?",
+                'Development': "Development milestones to watch for:\n\n• **0-3 months**: Smiling, head control\n• **3-6 months**: Rolling, sitting support\n• **6-9 months**: Crawling, standing\n• **9-12 months**: Walking, first words\n\nEvery baby develops at their own pace!",
+                'Emergency': "For medical emergencies:\n\n• **Call 108**: Emergency medical services\n• **High fever**: Above 100.4°F (38°C)\n• **Difficulty breathing**: Seek immediate help\n• **Unusual crying**: Persistent, high-pitched\n\nI can help find nearby hospitals if needed."
+            };
+            
+            const response = responses[userMessage] || "I understand your concern. Based on your baby's situation, I'd recommend consulting with your pediatrician for personalized advice. I can also help you find nearby healthcare facilities or government schemes that might be helpful.";
+            addMessage(response, 'ai');
+        }
+
+        function quickChat(topic) {
+            document.getElementById('messageInput').value = topic;
+            sendMessage();
+        }
+
+        // Video Call Functions
+        let callActive = false;
+        let isMuted = false;
+
+        function startCall() {
+            if (!callActive) {
+                document.getElementById('videoStatus').textContent = '📹 Connected to AI Nurse Assistant';
+                callActive = true;
+                setTimeout(() => {
+                    document.getElementById('videoStatus').textContent = '🤖 How can I help you today?';
+                }, 2000);
+            }
+        }
+
+        function endCall() {
+            document.getElementById('videoStatus').textContent = '📹 Call ended';
+            callActive = false;
+            setTimeout(() => {
+                document.getElementById('videoStatus').textContent = '📹 Tap to start video consultation';
+            }, 2000);
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.querySelector('.video-btn.mute').textContent = isMuted ? '🔇' : '🎤';
+        }
+
+        // Health Tracker Functions
+        function showTrackerTab(tab) {
+            document.querySelectorAll('.tracker-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tracker-content').forEach(c => c.classList.add('hidden'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tracker').classList.remove('hidden');
+        }
+
+        // Cry Decoder Functions
+        function recordCry() {
+            alert('🎤 Recording started... (This would access the microphone in a real app)');
+            setTimeout(() => {
+                alert('📊 Analysis complete: Hunger cry detected. Your baby seems to be hungry.');
+            }, 3000);
+        }
+
+        function uploadCry() {
+            alert('📁 Please select an audio file... (This would open file picker in a real app)');
+        }
+
+        // Community Functions
+        function shareExperience() {
+            alert('🎤 Voice-to-text feature would be activated here for easy sharing');
+        }
+
+        // Government Schemes Functions
+        function applyScheme(scheme) {
+            alert(`Redirecting to ${scheme} application portal...`);
+        }
+
+        function findCenter() {
+            alert('🗺️ Finding nearest Anganwadi centers based on your location...');
+        }
+
+        // Profile Functions
+        function editProfile() {
+            alert('✏️ Edit Profile feature would open here');
+        }
+
+        function babyProfile() {
+            alert('👶 Baby Profile management would open here');
+        }
+
+        function healthReports() {
+            alert('📄 Health reports and medical history would be displayed here');
+        }
+
+        function languageSettings() {
+            alert('🌍 Language selection (Hindi, English, Tamil, Telugu, etc.) would be available here');
+        }
+
+        function notifications() {
+            alert('🔔 Notification settings and appointment reminders would be configured here');
+        }
+
+        function helpSupport() {
+            alert('❓ Help & Support section with FAQs and contact information would open here');
+        }
+
+        // Handle Enter key for chat
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add welcome message to chat
+            setTimeout(() => {
+                addMessage("Welcome to BabyWise! I'm here to help you with all your parenting questions. You can ask me about feeding, sleeping, development milestones, or any other concerns you have about your baby.", 'ai');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
