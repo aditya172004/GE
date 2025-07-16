@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BabyWise - AI Parenting Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-screen">
+            <div class="status-bar">
+                <div class="status-left">
+                    <span>9:41</span>
+                </div>
+                <div class="status-center">
+                    <span>BabyWise</span>
+                </div>
+                <div class="status-right">
+                    <div class="signal-bars">
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                    </div>
+                    <span>100%</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                        <div class="battery-tip"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-header" id="appHeader">
+                <div class="app-title">BabyWise AI</div>
+                <div class="app-subtitle">Your smart parenting companion</div>
+            </div>
+
+            <div class="content-area">
+                <!-- Home Page -->
+                <div class="page active" id="homePage">
+                    <div class="feature-grid">
+                        <div class="feature-card" onclick="showChatBot()">
+                            <div class="feature-icon">💬</div>
+                            <div class="feature-title">AI Chat</div>
+                            <div class="feature-description">Get instant answers to your parenting questions</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showVideoCall()">
+                            <div class="feature-icon">📹</div>
+                            <div class="feature-title">Video Consult</div>
+                            <div class="feature-description">Instant video consultation with AI nurse</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showHealthTracker()">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-title">Health Tracker</div>
+                            <div class="feature-description">Track baby's growth and milestones</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showCryDecoder()">
+                            <div class="feature-icon">🍼</div>
+                            <div class="feature-title">Cry Decoder</div>
+                            <div class="feature-description">Understand what your baby needs</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showCommunity()">
+                            <div class="feature-icon">👥</div>
+                            <div class="feature-title">Community</div>
+                            <div class="feature-description">Connect with other parents</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showSchemes()">
+                            <div class="feature-icon">🏛️</div>
+                            <div class="feature-title">Gov Schemes</div>
+                            <div class="feature-description">Available government benefits</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Page -->
+                <div class="page" id="chatPage">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div>
+                                <div class="chat-header-title">AI Assistant</div>
+                                <div class="chat-header-subtitle">Online • Ready to help</div>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="quickChat('Sleep Help')">😴 Sleep Help</div>
+                            <div class="quick-action" onclick="quickChat('Feeding Guide')">🍼 Feeding Guide</div>
+                            <div class="quick-action" onclick="quickChat('Development')">👶 Development</div>
+                            <div class="quick-action" onclick="quickChat('Emergency')">🚨 Emergency</div>
+                        </div>
+
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message-row">
+                                <div class="ai-avatar">🤖</div>
+                                <div class="message ai">
+                                    Hi! I'm your AI parenting assistant. I'm here to help with any questions about your baby's care, development, or health. How can I assist you today?
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input">
+                            <div class="input-container">
+                                <input type="text" class="input-field" placeholder="Ask me anything about your baby..." id="messageInput">
+                                <div class="input-actions">
+                                    <button class="input-icon" onclick="handleFileUpload()" title="Upload file">
+                                        📎
+                                    </button>
+                                    <button class="input-icon" onclick="handleVoiceInput()" title="Voice input" id="voiceButton">
+                                        🎤
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="send-button" onclick="sendMessage()">➤</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Call Page -->
+                <div class="page" id="videoCallPage">
+                    <div class="video-call-container">
+                        <div id="videoStatus">📹 Tap to start video consultation</div>
+                        <div class="video-controls">
+                            <button class="video-btn call" onclick="startCall()">📞</button>
+                            <button class="video-btn mute" onclick="toggleMute()">🎤</button>
+                            <button class="video-btn end" onclick="endCall()">📵</button>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" style="margin: 20px;">
+                        <div class="feature-title">AI Nurse Assistant</div>
+                        <div class="feature-description">Get instant medical guidance for your baby. If the AI is uncertain, it will recommend nearby healthcare facilities based on cost and distance.</div>
+                    </div>
+                </div>
+
+                <!-- Health Tracker Page -->
+                <div class="page" id="healthTrackerPage">
+                    <div class="tracker-section">
+                        <div class="tracker-tabs">
+                            <div class="tracker-tab active" onclick="showTrackerTab('baby')">Baby</div>
+                            <div class="tracker-tab" onclick="showTrackerTab('mother')">Mother</div>
+                        </div>
+                        
+                        <div id="babyTracker" class="tracker-content">
+                            <div class="milestone-item">
+                                <div class="milestone-icon">🍼</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">First Feeding</div>
+                                    <div class="milestone-description">Track feeding times and amounts</div>
+                                </div>
+                                <div class="milestone-status completed">Completed</div>
+                            </div>
+                            
+                            <div class="milestone-item">
+                                <div class="milestone-icon">😴</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Sleep Pattern</div>
+                                    <div class="milestone-description">Monitor sleep cycles and duration</div>
+                                </div>
+                                <div class="milestone-status pending">Pending</div>
+                            </div>
+                            
+                            <div class="milestone-item">
+                                <div class="milestone-icon">💉</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Vaccination</div>
+                                    <div class="milestone-description">Next: DPT vaccine due in 2 weeks</div>
+                                </div>
+                                <div class="milestone-status pending">Scheduled</div>
+                            </div>
+                        </div>
+                        
+                        <div id="motherTracker" class="tracker-content hidden">
+                            <div class="milestone-item">
+                                <div class="milestone-icon">🥗</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Nutrition</div>
+                                    <div class="milestone-description">Daily nutritional requirements</div>
+                                </div>
+                                <div class="milestone-status completed">On Track</div>
+                            </div>
+                            
+                            <div class="milestone-item">
+                                <div class="milestone-icon">🧘</div>
+                                <div class="milestone-content">
+                                    <div class="milestone-title">Exercise</div>
+                                    <div class="milestone-description">Postpartum recovery exercises</div>
+                                </div>
+                                <div class="milestone-status pending">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cry Decoder Page -->
+                <div class="page" id="cryDecoderPage">
+                    <div class="cry-decoder">
+                        <div class="cry-upload">
+                            <div class="cry-upload-icon">🎵</div>
+                            <h3>Baby Cry Decoder</h3>
+                            <p>Upload or record your baby's cry to understand what they need</p>
+                            <div style="margin-top: 20px;">
+                                <button class="upload-btn" onclick="recordCry()">🎤 Record Cry</button>
+                                <button class="upload-btn" onclick="uploadCry()">📁 Upload Audio</button>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card" style="margin: 20px 0;">
+                            <div class="feature-title">Recent Analysis</div>
+                            <div class="feature-description">
+                                <strong>Hunger Cry detected</strong><br>
+                                Your baby seems to be hungry. Try feeding them.
+                            </div>
+                        </div>
+                        
+                        <div class="feature-card" style="margin: 20px 0;">
+                            <div class="feature-title">Emergency Alert</div>
+                            <div class="feature-description">
+                                If urgent issues are detected, nearby health centers will be notified automatically.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Page -->
+                <div class="page" id="communityPage">
+                    <div class="community-post">
+                        <div class="post-header">
+                            <div class="post-avatar">👩</div>
+                            <div class="post-info">
+                                <div class="post-author">Priya Sharma</div>
+                                <div class="post-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            My 8-month-old finally started crawling! So exciting to see these milestones. Any tips for baby-proofing the house?
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">❤️ 12 likes</div>
+                            <div class="post-action">💬 5 comments</div>
+                            <div class="post-action">🔄 Share</div>
+                        </div>
+                    </div>
+                    
+                    <div class="community-post">
+                        <div class="post-header">
+                            <div class="post-avatar">👨</div>
+                            <div class="post-info">
+                                <div class="post-author">Raj Patel</div>
+                                <div class="post-time">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            सहारा आंगनवाड़ी केंद्र में निःशुल्क टीकाकरण शिविर आयोजित किया गया। सभी माताओं को इसका लाभ उठाना चाहिए।
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">❤️ 8 likes</div>
+                            <div class="post-action">💬 3 comments</div>
+                            <div class="post-action">🔄 Share</div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card" style="margin: 20px; text-align: center;">
+                        <button class="upload-btn" onclick="shareExperience()">🎤 Share Your Experience</button>
+                    </div>
+                </div>
+
+                <!-- Government Schemes Page -->
+                <div class="page" id="schemesPage">
+                    <div class="scheme-card">
+                        <div class="scheme-title">Pradhan Mantri Matru Vandana Yojana</div>
+                        <div class="scheme-description">
+                            Cash incentive of ₹5,000 for pregnant and lactating mothers for the first living child.
+                        </div>
+                        <button class="scheme-btn" onclick="applyScheme('PMMVY')">Apply Now</button>
+                    </div>
+                    
+                    <div class="scheme-card">
+                        <div class="scheme-title">Janani Suraksha Yojana</div>
+                        <div class="scheme-description">
+                            Cash assistance for institutional delivery and transportation support.
+                        </div>
+                        <button class="scheme-btn" onclick="applyScheme('JSY')">Apply Now</button>
+                    </div>
+                    
+                    <div class="scheme-card">
+                        <div class="scheme-title">Anganwadi Services</div>
+                        <div class="scheme-description">
+                            Free immunization, health check-ups, and nutrition services at nearby centers.
+                        </div>
+                        <button class="scheme-btn" onclick="findCenter()">Find Center</button>
+                    </div>
+                    
+                    <div class="scheme-card">
+                        <div class="scheme-title">Poshan Abhiyaan</div>
+                        <div class="scheme-description">
+                            National nutrition mission providing supplementary nutrition for children and mothers.
+                        </div>
+                        <button class="scheme-btn" onclick="applyScheme('POSHAN')">Learn More</button>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div class="page" id="profilePage">
+                    <div class="profile-section">
+                        <div class="profile-header">
+                            <div class="profile-avatar">👤</div>
+                            <div class="profile-name">Welcome User</div>
+                            <div class="profile-subtitle">Parent of a 6-month-old</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="editProfile()">
+                            <div class="profile-option-icon">✏️</div>
+                            <div class="profile-option-text">Edit Profile</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="babyProfile()">
+                            <div class="profile-option-icon">👶</div>
+                            <div class="profile-option-text">Baby Profile</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="healthReports()">
+                            <div class="profile-option-icon">📄</div>
+                            <div class="profile-option-text">Health Reports</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="languageSettings()">
+                            <div class="profile-option-icon">🌍</div>
+                            <div class="profile-option-text">Language Settings</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="notifications()">
+                            <div class="profile-option-icon">🔔</div>
+                            <div class="profile-option-text">Notifications</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                        
+                        <div class="profile-option" onclick="helpSupport()">
+                            <div class="profile-option-icon">❓</div>
+                            <div class="profile-option-text">Help & Support</div>
+                            <div class="profile-option-arrow">→</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="navigation">
+                <div class="nav-item active" onclick="showPage('home')">
+                    <div class="nav-icon">🏠</div>
+                    <div>Home</div>
+                </div>
+                <div class="nav-item" onclick="showPage('chat')">
+                    <div class="nav-icon">💬</div>
+                    <div>Chat</div>
+                </div>
+                <div class="nav-item" onclick="showPage('healthTracker')">
+                    <div class="nav-icon">📊</div>
+                    <div>Tracker</div>
+                </div>
+                <div class="nav-item" onclick="showPage('community')">
+                    <div class="nav-icon">👥</div>
+                    <div>Community</div>
+                </div>
+                <div class="nav-item" onclick="showPage('profile')">
+                    <div class="nav-icon">👤</div>
+                    <div>Profile</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Recording Indicator -->
+    <div class="voice-recording" id="voiceRecording">
+        <div class="recording-animation"></div>
+        <div>Recording...</div>
+        <div style="font-size: 12px; margin-top: 5px;">Tap to stop</div>
+    </div>
+
+    <!-- Hidden file input -->
+    <input type="file" id="fileInput" class="file-input" accept="image/*,audio/*,.pdf,.doc,.docx" multiple>
+
+    <!-- JavaScript files -->
+    <script src="config.js"></script>
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
