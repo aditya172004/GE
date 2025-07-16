@@ -314,7 +314,7 @@ class BabyWiseApp {
         
         if (sender === 'ai') {
             messageRow.innerHTML = `
-                <div class="ai-avatar">🤖</div>
+                <div class="ai-avatar">👨‍⚕️</div>
                 <div class="message ai">${text}</div>
             `;
         } else {
@@ -334,7 +334,7 @@ class BabyWiseApp {
         
         const typingRow = Utils.dom.createElement('div', { class: 'message-row typing-row' });
         typingRow.innerHTML = `
-            <div class="ai-avatar">🤖</div>
+            <div class="ai-avatar">👨‍⚕️</div>
             <div class="typing-indicator">
                 <div class="typing-dots">
                     <div class="dot"></div>
@@ -386,7 +386,7 @@ class BabyWiseApp {
                 callLabel.textContent = 'Connected';
                 
                 setTimeout(() => {
-                    videoStatus.textContent = '🤖 How can I help you today?';
+                    videoStatus.textContent = '👩‍⚕️ How can I help you today?';
                 }, 2000);
             }
         }

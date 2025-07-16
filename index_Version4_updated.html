@@ -1489,7 +1489,7 @@
             
             if (sender === 'ai') {
                 messageRow.innerHTML = `
-                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-avatar">👨‍⚕️</div>
                     <div class="message ai">${text}</div>
                 `;
             } else {
@@ -1507,7 +1507,7 @@
             const typingRow = document.createElement('div');
             typingRow.className = 'message-row typing-row';
             typingRow.innerHTML = `
-                <div class="ai-avatar">🤖</div>
+                <div class="ai-avatar">👨‍⚕️</div>
                 <div class="typing-indicator">
                     <div class="typing-dots">
                         <div class="dot"></div>
@@ -1551,19 +1551,19 @@
 
         function startCall() {
             if (!callActive) {
-                document.getElementById('videoStatus').textContent = '📹 Connected to AI Nurse Assistant';
+                document.getElementById('videoStatus').textContent = '👩‍⚕️ Connected to AI Nurse Assistant';
                 callActive = true;
                 setTimeout(() => {
-                    document.getElementById('videoStatus').textContent = '🤖 How can I help you today?';
+                    document.getElementById('videoStatus').textContent = '👩‍⚕️ How can I help you today?';
                 }, 2000);
             }
         }
 
         function endCall() {
-            document.getElementById('videoStatus').textContent = '📹 Call ended';
+            document.getElementById('videoStatus').textContent = '👩‍⚕️ Call ended';
             callActive = false;
             setTimeout(() => {
-                document.getElementById('videoStatus').textContent = '📹 Tap to start video consultation';
+                document.getElementById('videoStatus').textContent = '👩‍⚕️ Tap to start video consultation';
             }, 2000);
         }
 
