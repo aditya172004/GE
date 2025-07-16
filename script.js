@@ -164,6 +164,24 @@ class BabyWiseApp {
         this.toggleHeader(false);
     }
     
+    showHealthReports() {
+        Utils.dom.querySelectorAll('.page').forEach(p => Utils.dom.removeClass(p, 'active'));
+        const healthReportsPage = Utils.dom.getElementById('healthReportsPage');
+        if (healthReportsPage) {
+            Utils.dom.addClass(healthReportsPage, 'active');
+        }
+        this.toggleHeader(false);
+    }
+    
+    showJournalTracker() {
+        Utils.dom.querySelectorAll('.page').forEach(p => Utils.dom.removeClass(p, 'active'));
+        const journalTrackerPage = Utils.dom.getElementById('journalTrackerPage');
+        if (journalTrackerPage) {
+            Utils.dom.addClass(journalTrackerPage, 'active');
+        }
+        this.toggleHeader(false);
+    }
+    
     // File Upload Handler
     handleFileUpload() {
         const fileInput = Utils.dom.getElementById('fileInput');
@@ -513,6 +531,11 @@ class BabyWiseApp {
     helpSupport() {
         alert('❓ Help & Support section with FAQs and contact information would open here');
     }
+    
+    // Journal Tracker Functions
+    addJournalEntry() {
+        alert('📸 Camera and photo picker would open here to add a new memory');
+    }
 }
 
 // Global functions for onclick handlers
@@ -622,6 +645,18 @@ function notifications() {
 
 function helpSupport() {
     app.helpSupport();
+}
+
+function showHealthReports() {
+    app.showHealthReports();
+}
+
+function showJournalTracker() {
+    app.showJournalTracker();
+}
+
+function addJournalEntry() {
+    app.addJournalEntry();
 }
 
 // Initialize app when DOM is loaded

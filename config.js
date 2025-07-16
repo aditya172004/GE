@@ -73,6 +73,20 @@ const CONFIG = {
             title: 'Gov Schemes',
             description: 'Available government benefits',
             action: 'showSchemes'
+        },
+        {
+            id: 'healthReports',
+            icon: '📋',
+            title: 'Health Reports',
+            description: 'View past health reports and medical history',
+            action: 'showHealthReports'
+        },
+        {
+            id: 'journalTracker',
+            icon: '📸',
+            title: 'Growth Journal',
+            description: 'Capture your baby\'s growth journey with photos',
+            action: 'showJournalTracker'
         }
     ],
 
@@ -230,7 +244,105 @@ const CONFIG = {
     emergency: {
         number: '108',
         description: 'Emergency medical services'
-    }
+    },
+
+    // Health Reports dummy data
+    healthReports: [
+        {
+            id: 1,
+            date: '2024-01-15',
+            type: 'Routine Checkup',
+            doctor: 'Dr. Sarah Johnson',
+            summary: 'Normal growth and development. Weight: 7.2kg, Height: 68cm',
+            recommendations: 'Continue current feeding schedule. Next appointment in 2 months.',
+            icon: '🩺'
+        },
+        {
+            id: 2,
+            date: '2024-02-20',
+            type: 'Vaccination',
+            doctor: 'Dr. Mike Chen',
+            summary: 'DPT vaccine administered. No adverse reactions observed.',
+            recommendations: 'Monitor for fever. Next vaccination due in 6 weeks.',
+            icon: '💉'
+        },
+        {
+            id: 3,
+            date: '2024-03-10',
+            type: 'Nutrition Assessment',
+            doctor: 'Dr. Emily Davis',
+            summary: 'Healthy weight gain. Transitioning to solid foods well.',
+            recommendations: 'Introduce new foods gradually. Increase iron-rich foods.',
+            icon: '🥗'
+        },
+        {
+            id: 4,
+            date: '2024-03-25',
+            type: 'Development Check',
+            doctor: 'Dr. Sarah Johnson',
+            summary: 'Meeting all milestones. Excellent motor skills development.',
+            recommendations: 'Continue tummy time. Encourage crawling activities.',
+            icon: '👶'
+        }
+    ],
+
+    // Personal Journal Tracker dummy data
+    journalEntries: [
+        {
+            id: 1,
+            date: '2024-01-01',
+            title: 'First New Year',
+            photo: '👶',
+            description: 'Baby\'s first New Year celebration! So tiny and precious.',
+            milestone: 'First Holiday',
+            age: '2 months'
+        },
+        {
+            id: 2,
+            date: '2024-01-20',
+            title: 'First Smile',
+            photo: '😊',
+            description: 'Today baby gave us the most beautiful smile! Heart melted.',
+            milestone: 'Social Development',
+            age: '2.5 months'
+        },
+        {
+            id: 3,
+            date: '2024-02-14',
+            title: 'Valentine\'s Day',
+            photo: '💕',
+            description: 'Our little valentine looking adorable in red outfit.',
+            milestone: 'Growing Up',
+            age: '3 months'
+        },
+        {
+            id: 4,
+            date: '2024-02-28',
+            title: 'Rolling Over',
+            photo: '🤸',
+            description: 'First time rolling from back to tummy! So proud!',
+            milestone: 'Motor Development',
+            age: '3.5 months'
+        },
+        {
+            id: 5,
+            date: '2024-03-15',
+            title: 'Sitting Up',
+            photo: '🪑',
+            description: 'Learning to sit up with support. Getting stronger every day!',
+            milestone: 'Physical Development',
+            age: '4 months'
+        },
+        {
+            id: 6,
+            date: '2024-03-30',
+            title: 'First Tooth',
+            photo: '🦷',
+            description: 'The first tiny tooth appeared! Growing up so fast.',
+            milestone: 'Teething',
+            age: '4.5 months'
+        }
+    ]
 };
 
 // Export for use in other files

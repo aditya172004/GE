@@ -75,6 +75,18 @@
                             <div class="feature-title">Gov Schemes</div>
                             <div class="feature-description">Available government benefits</div>
                         </div>
+
+                        <div class="feature-card" onclick="showHealthReports()">
+                            <div class="feature-icon">📋</div>
+                            <div class="feature-title">Health Reports</div>
+                            <div class="feature-description">View past health reports and medical history</div>
+                        </div>
+
+                        <div class="feature-card" onclick="showJournalTracker()">
+                            <div class="feature-icon">📸</div>
+                            <div class="feature-title">Growth Journal</div>
+                            <div class="feature-description">Capture your baby's growth journey with photos</div>
+                        </div>
                     </div>
                 </div>
 
@@ -322,6 +334,172 @@
                             National nutrition mission providing supplementary nutrition for children and mothers.
                         </div>
                         <button class="scheme-btn" onclick="applyScheme('POSHAN')">Learn More</button>
+                    </div>
+                </div>
+
+                <!-- Health Reports Page -->
+                <div class="page" id="healthReportsPage">
+                    <div class="health-reports-container">
+                        <div class="page-header">
+                            <h2>Past Health Reports</h2>
+                            <p>View your baby's medical history and health records</p>
+                        </div>
+                        
+                        <div class="reports-list">
+                            <div class="report-card">
+                                <div class="report-header">
+                                    <div class="report-icon">🩺</div>
+                                    <div class="report-info">
+                                        <div class="report-title">Routine Checkup</div>
+                                        <div class="report-date">January 15, 2024</div>
+                                        <div class="report-doctor">Dr. Sarah Johnson</div>
+                                    </div>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-summary">Normal growth and development. Weight: 7.2kg, Height: 68cm</div>
+                                    <div class="report-recommendations">Continue current feeding schedule. Next appointment in 2 months.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="report-card">
+                                <div class="report-header">
+                                    <div class="report-icon">💉</div>
+                                    <div class="report-info">
+                                        <div class="report-title">Vaccination</div>
+                                        <div class="report-date">February 20, 2024</div>
+                                        <div class="report-doctor">Dr. Mike Chen</div>
+                                    </div>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-summary">DPT vaccine administered. No adverse reactions observed.</div>
+                                    <div class="report-recommendations">Monitor for fever. Next vaccination due in 6 weeks.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="report-card">
+                                <div class="report-header">
+                                    <div class="report-icon">🥗</div>
+                                    <div class="report-info">
+                                        <div class="report-title">Nutrition Assessment</div>
+                                        <div class="report-date">March 10, 2024</div>
+                                        <div class="report-doctor">Dr. Emily Davis</div>
+                                    </div>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-summary">Healthy weight gain. Transitioning to solid foods well.</div>
+                                    <div class="report-recommendations">Introduce new foods gradually. Increase iron-rich foods.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="report-card">
+                                <div class="report-header">
+                                    <div class="report-icon">👶</div>
+                                    <div class="report-info">
+                                        <div class="report-title">Development Check</div>
+                                        <div class="report-date">March 25, 2024</div>
+                                        <div class="report-doctor">Dr. Sarah Johnson</div>
+                                    </div>
+                                </div>
+                                <div class="report-content">
+                                    <div class="report-summary">Meeting all milestones. Excellent motor skills development.</div>
+                                    <div class="report-recommendations">Continue tummy time. Encourage crawling activities.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Journal Tracker Page -->
+                <div class="page" id="journalTrackerPage">
+                    <div class="journal-container">
+                        <div class="page-header">
+                            <h2>Growth Journal</h2>
+                            <p>Capture and cherish your baby's precious moments</p>
+                        </div>
+                        
+                        <div class="journal-entries">
+                            <div class="journal-entry">
+                                <div class="entry-photo">👶</div>
+                                <div class="entry-content">
+                                    <div class="entry-header">
+                                        <div class="entry-title">First New Year</div>
+                                        <div class="entry-date">January 1, 2024</div>
+                                    </div>
+                                    <div class="entry-age">2 months old</div>
+                                    <div class="entry-description">Baby's first New Year celebration! So tiny and precious.</div>
+                                    <div class="entry-milestone">First Holiday</div>
+                                </div>
+                            </div>
+                            
+                            <div class="journal-entry">
+                                <div class="entry-photo">😊</div>
+                                <div class="entry-content">
+                                    <div class="entry-header">
+                                        <div class="entry-title">First Smile</div>
+                                        <div class="entry-date">January 20, 2024</div>
+                                    </div>
+                                    <div class="entry-age">2.5 months old</div>
+                                    <div class="entry-description">Today baby gave us the most beautiful smile! Heart melted.</div>
+                                    <div class="entry-milestone">Social Development</div>
+                                </div>
+                            </div>
+                            
+                            <div class="journal-entry">
+                                <div class="entry-photo">💕</div>
+                                <div class="entry-content">
+                                    <div class="entry-header">
+                                        <div class="entry-title">Valentine's Day</div>
+                                        <div class="entry-date">February 14, 2024</div>
+                                    </div>
+                                    <div class="entry-age">3 months old</div>
+                                    <div class="entry-description">Our little valentine looking adorable in red outfit.</div>
+                                    <div class="entry-milestone">Growing Up</div>
+                                </div>
+                            </div>
+                            
+                            <div class="journal-entry">
+                                <div class="entry-photo">🤸</div>
+                                <div class="entry-content">
+                                    <div class="entry-header">
+                                        <div class="entry-title">Rolling Over</div>
+                                        <div class="entry-date">February 28, 2024</div>
+                                    </div>
+                                    <div class="entry-age">3.5 months old</div>
+                                    <div class="entry-description">First time rolling from back to tummy! So proud!</div>
+                                    <div class="entry-milestone">Motor Development</div>
+                                </div>
+                            </div>
+                            
+                            <div class="journal-entry">
+                                <div class="entry-photo">🪑</div>
+                                <div class="entry-content">
+                                    <div class="entry-header">
+                                        <div class="entry-title">Sitting Up</div>
+                                        <div class="entry-date">March 15, 2024</div>
+                                    </div>
+                                    <div class="entry-age">4 months old</div>
+                                    <div class="entry-description">Learning to sit up with support. Getting stronger every day!</div>
+                                    <div class="entry-milestone">Physical Development</div>
+                                </div>
+                            </div>
+                            
+                            <div class="journal-entry">
+                                <div class="entry-photo">🦷</div>
+                                <div class="entry-content">
+                                    <div class="entry-header">
+                                        <div class="entry-title">First Tooth</div>
+                                        <div class="entry-date">March 30, 2024</div>
+                                    </div>
+                                    <div class="entry-age">4.5 months old</div>
+                                    <div class="entry-description">The first tiny tooth appeared! Growing up so fast.</div>
+                                    <div class="entry-milestone">Teething</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="add-entry-btn-container">
+                            <button class="add-entry-btn" onclick="addJournalEntry()">📸 Add New Memory</button>
+                        </div>
                     </div>
                 </div>
 
