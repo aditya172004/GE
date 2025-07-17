@@ -1428,12 +1428,16 @@ body {
 
 .hospital-type {
     font-size: 12px;
-    padding: 4px 8px;
+    padding: 6px 12px;
     border-radius: 10px;
     font-weight: 500;
     text-transform: uppercase;
     margin-bottom: 8px;
     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
 }
 
 .hospital-type.government {
