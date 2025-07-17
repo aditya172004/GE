@@ -627,6 +627,294 @@ class BabyWiseApp {
     addJournalEntry() {
         alert('📸 Camera and photo picker would open here to add a new memory');
     }
+    
+    // Hospital Finder Functions
+    showHospitalFinder() {
+        Utils.dom.querySelectorAll('.page').forEach(p => Utils.dom.removeClass(p, 'active'));
+        const hospitalFinderPage = Utils.dom.getElementById('hospitalFinderPage');
+        if (hospitalFinderPage) {
+            Utils.dom.addClass(hospitalFinderPage, 'active');
+        }
+        this.toggleHeader(false);
+        
+        // Initialize hospital finder with all hospitals
+        this.loadHospitals();
+    }
+    
+    loadHospitals(filter = 'all', sortBy = 'distance') {
+        const hospitalsList = Utils.dom.getElementById('hospitalsList');
+        if (!hospitalsList) return;
+        
+        let hospitals = [...CONFIG.hospitals];
+        
+        // Apply filter
+        if (filter !== 'all') {
+            hospitals = hospitals.filter(hospital => hospital.type === filter);
+        }
+        
+        // Apply sorting
+        hospitals.sort((a, b) => {
+            switch (sortBy) {
+                case 'distance':
+                    return a.distance - b.distance;
+                case 'cost':
+                    return a.cost.consultation - b.cost.consultation;
+                case 'rating':
+                    return b.rating - a.rating;
+                default:
+                    return 0;
+            }
+        });
+        
+        // Clear existing hospitals
+        hospitalsList.innerHTML = '';
+        
+        // Render hospitals
+        hospitals.forEach(hospital => {
+            const hospitalCard = this.createHospitalCard(hospital);
+            Utils.dom.appendChild(hospitalsList, hospitalCard);
+        });
+    }
+    
+    createHospitalCard(hospital) {
+        const card = Utils.dom.createElement('div', { class: 'hospital-card' });
+        
+        const ratingStars = '⭐'.repeat(Math.floor(hospital.rating));
+        const servicesHTML = hospital.services.map(service => 
+            `<span class="hospital-service">${service}</span>`
+        ).join('');
+        
+        const costDisplay = hospital.cost.consultation === 0 ? 'Free' : `₹${hospital.cost.consultation}`;
+        const vaccCostDisplay = hospital.cost.vaccination === 0 ? 'Free' : `₹${hospital.cost.vaccination}`;
+        
+        card.innerHTML = `
+            <div class="hospital-header">
+                <div class="hospital-info">
+                    <div class="hospital-name">${hospital.name}</div>
+                    <div class="hospital-type ${hospital.type}">${hospital.type}</div>
+                    <div class="hospital-address">📍 ${hospital.address}</div>
+                    <div class="hospital-distance">📏 ${hospital.distance} km away</div>
+                </div>
+            </div>
+            
+            <div class="hospital-stats">
+                <div class="hospital-stat">
+                    <span class="hospital-rating">
+                        <span class="hospital-rating-stars">${ratingStars}</span>
+                        <span>${hospital.rating}</span>
+                    </span>
+                </div>
+                <div class="hospital-stat">👨‍⚕️ ${hospital.doctorsCount} doctors</div>
+                <div class="hospital-stat">🏥 ${hospital.beds} beds</div>
+                <div class="hospital-stat">🕒 ${hospital.workingHours}</div>
+            </div>
+            
+            <div class="hospital-costs">
+                <div class="hospital-cost">
+                    <div class="hospital-cost-value">${costDisplay}</div>
+                    <div>Consultation</div>
+                </div>
+                <div class="hospital-cost">
+                    <div class="hospital-cost-value">${vaccCostDisplay}</div>
+                    <div>Vaccination</div>
+                </div>
+                <div class="hospital-cost">
+                    <div class="hospital-cost-value">₹${hospital.cost.emergency}</div>
+                    <div>Emergency</div>
+                </div>
+            </div>
+            
+            <div class="hospital-services">
+                ${servicesHTML}
+            </div>
+            
+            <div class="hospital-actions">
+                <button class="hospital-action primary" onclick="callHospital('${hospital.contactNumber}')">
+                    📞 Call Now
+                </button>
+                <button class="hospital-action secondary" onclick="getDirections(${hospital.id})">
+                    🗺️ Directions
+                </button>
+                <button class="hospital-action secondary" onclick="compareHospital(${hospital.id})">
+                    ⚖️ Compare
+                </button>
+            </div>
+        `;
+        
+        return card;
+    }
+    
+    searchHospitals() {
+        const searchInput = Utils.dom.getElementById('hospitalSearch');
+        const searchTerm = searchInput?.value.toLowerCase() || '';
+        
+        if (!searchTerm) {
+            this.loadHospitals();
+            return;
+        }
+        
+        const filteredHospitals = CONFIG.hospitals.filter(hospital => 
+            hospital.name.toLowerCase().includes(searchTerm) ||
+            hospital.address.toLowerCase().includes(searchTerm) ||
+            hospital.services.some(service => service.toLowerCase().includes(searchTerm))
+        );
+        
+        this.renderFilteredHospitals(filteredHospitals);
+    }
+    
+    renderFilteredHospitals(hospitals) {
+        const hospitalsList = Utils.dom.getElementById('hospitalsList');
+        if (!hospitalsList) return;
+        
+        hospitalsList.innerHTML = '';
+        
+        if (hospitals.length === 0) {
+            hospitalsList.innerHTML = `
+                <div class="no-results">
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🔍</div>
+                        <div style="font-size: 18px; margin-bottom: 10px;">No hospitals found</div>
+                        <div style="font-size: 14px;">Try a different search term</div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        hospitals.forEach(hospital => {
+            const hospitalCard = this.createHospitalCard(hospital);
+            Utils.dom.appendChild(hospitalsList, hospitalCard);
+        });
+    }
+    
+    filterHospitals(type) {
+        // Update active filter tab
+        Utils.dom.querySelectorAll('.filter-tab').forEach(tab => 
+            Utils.dom.removeClass(tab, 'active')
+        );
+        
+        const activeTab = Utils.dom.querySelector(`.filter-tab[onclick*="'${type}'"]`);
+        if (activeTab) {
+            Utils.dom.addClass(activeTab, 'active');
+        }
+        
+        // Load hospitals with filter
+        const sortBy = Utils.dom.getElementById('sortBy')?.value || 'distance';
+        this.loadHospitals(type, sortBy);
+    }
+    
+    sortHospitals() {
+        const sortBy = Utils.dom.getElementById('sortBy')?.value || 'distance';
+        const activeFilter = Utils.dom.querySelector('.filter-tab.active')?.textContent.toLowerCase() || 'all';
+        this.loadHospitals(activeFilter, sortBy);
+    }
+    
+    callHospital(phoneNumber) {
+        if (Utils.browser.supports.tel()) {
+            window.location.href = `tel:${phoneNumber}`;
+        } else {
+            alert(`📞 Call ${phoneNumber} to contact the hospital`);
+        }
+    }
+    
+    getDirections(hospitalId) {
+        const hospital = CONFIG.hospitals.find(h => h.id === hospitalId);
+        if (hospital) {
+            // In a real app, this would open maps
+            alert(`🗺️ Opening directions to ${hospital.name}...\n\nAddress: ${hospital.address}\nDistance: ${hospital.distance} km`);
+        }
+    }
+    
+    compareHospital(hospitalId) {
+        const hospital = CONFIG.hospitals.find(h => h.id === hospitalId);
+        if (hospital) {
+            // Find nearby hospitals for comparison
+            const nearbyHospitals = CONFIG.hospitals
+                .filter(h => h.id !== hospitalId)
+                .sort((a, b) => a.distance - b.distance)
+                .slice(0, 2);
+            
+            this.showComparison([hospital, ...nearbyHospitals]);
+        }
+    }
+    
+    showComparison(hospitals) {
+        const comparisonSection = Utils.dom.getElementById('comparisonSection');
+        const comparisonContent = Utils.dom.getElementById('comparisonContent');
+        
+        if (!comparisonSection || !comparisonContent) return;
+        
+        // Generate comparison content
+        const comparisonHTML = this.generateComparisonHTML(hospitals);
+        comparisonContent.innerHTML = comparisonHTML;
+        
+        // Show comparison modal
+        comparisonSection.style.display = 'flex';
+        
+        // Add event listener for clicking outside to close
+        comparisonSection.addEventListener('click', (e) => {
+            if (e.target === comparisonSection) {
+                this.closeComparison();
+            }
+        });
+    }
+    
+    generateComparisonHTML(hospitals) {
+        const hospitalsHTML = hospitals.map(hospital => `
+            <div class="comparison-hospital">
+                <div class="comparison-hospital-name">${hospital.name}</div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Type:</span>
+                    <span class="comparison-item-value">${hospital.type}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Distance:</span>
+                    <span class="comparison-item-value">${hospital.distance} km</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Rating:</span>
+                    <span class="comparison-item-value">⭐ ${hospital.rating}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Consultation:</span>
+                    <span class="comparison-item-value">${hospital.cost.consultation === 0 ? 'Free' : '₹' + hospital.cost.consultation}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Vaccination:</span>
+                    <span class="comparison-item-value">${hospital.cost.vaccination === 0 ? 'Free' : '₹' + hospital.cost.vaccination}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Emergency:</span>
+                    <span class="comparison-item-value">₹${hospital.cost.emergency}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Doctors:</span>
+                    <span class="comparison-item-value">${hospital.doctorsCount}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Beds:</span>
+                    <span class="comparison-item-value">${hospital.beds}</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-item-label">Hours:</span>
+                    <span class="comparison-item-value">${hospital.workingHours}</span>
+                </div>
+            </div>
+        `).join('');
+        
+        return `
+            <div class="comparison-hospitals">
+                ${hospitalsHTML}
+            </div>
+        `;
+    }
+    
+    closeComparison() {
+        const comparisonSection = Utils.dom.getElementById('comparisonSection');
+        if (comparisonSection) {
+            comparisonSection.style.display = 'none';
+        }
+    }
 }
 
 // Global functions for onclick handlers
@@ -756,6 +1044,38 @@ function showJournalTracker() {
 
 function addJournalEntry() {
     app.addJournalEntry();
+}
+
+function showHospitalFinder() {
+    app.showHospitalFinder();
+}
+
+function searchHospitals() {
+    app.searchHospitals();
+}
+
+function filterHospitals(type) {
+    app.filterHospitals(type);
+}
+
+function sortHospitals() {
+    app.sortHospitals();
+}
+
+function callHospital(phoneNumber) {
+    app.callHospital(phoneNumber);
+}
+
+function getDirections(hospitalId) {
+    app.getDirections(hospitalId);
+}
+
+function compareHospital(hospitalId) {
+    app.compareHospital(hospitalId);
+}
+
+function closeComparison() {
+    app.closeComparison();
 }
 
 // Initialize app when DOM is loaded

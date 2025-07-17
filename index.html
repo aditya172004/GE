@@ -87,6 +87,12 @@
                             <div class="feature-title">Growth Journal</div>
                             <div class="feature-description">Capture your baby's growth journey with photos</div>
                         </div>
+
+                        <div class="feature-card" onclick="showHospitalFinder()">
+                            <div class="feature-icon">🏥</div>
+                            <div class="feature-title">Nearest Hospital</div>
+                            <div class="feature-description">Find nearby hospitals and vaccination centers</div>
+                        </div>
                     </div>
                 </div>
 
@@ -526,6 +532,52 @@
                         
                         <div class="add-entry-btn-container">
                             <button class="add-entry-btn" onclick="addJournalEntry()">📸 Add New Memory</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hospital Finder Page -->
+                <div class="page" id="hospitalFinderPage">
+                    <div class="hospital-finder-container">
+                        <div class="page-header">
+                            <h2>🏥 Nearest Hospitals</h2>
+                            <p>Find hospitals and vaccination centers near you</p>
+                        </div>
+                        
+                        <div class="search-filters">
+                            <div class="search-bar">
+                                <input type="text" id="hospitalSearch" placeholder="Search hospitals..." class="search-input">
+                                <button class="search-button" onclick="searchHospitals()">🔍</button>
+                            </div>
+                            
+                            <div class="filter-tabs">
+                                <button class="filter-tab active" onclick="filterHospitals('all')">All</button>
+                                <button class="filter-tab" onclick="filterHospitals('government')">Government</button>
+                                <button class="filter-tab" onclick="filterHospitals('private')">Private</button>
+                                <button class="filter-tab" onclick="filterHospitals('vaccination')">Vaccination</button>
+                            </div>
+                            
+                            <div class="sort-options">
+                                <select id="sortBy" class="sort-select" onchange="sortHospitals()">
+                                    <option value="distance">Sort by Distance</option>
+                                    <option value="cost">Sort by Cost</option>
+                                    <option value="rating">Sort by Rating</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="hospitals-list" id="hospitalsList">
+                            <!-- Hospitals will be populated here by JavaScript -->
+                        </div>
+                        
+                        <div class="comparison-section" id="comparisonSection" style="display: none;">
+                            <div class="comparison-header">
+                                <h3>Hospital Comparison</h3>
+                                <button class="comparison-close" onclick="closeComparison()">×</button>
+                            </div>
+                            <div class="comparison-content" id="comparisonContent">
+                                <!-- Comparison content will be populated here -->
+                            </div>
                         </div>
                     </div>
                 </div>
