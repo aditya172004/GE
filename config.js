@@ -87,6 +87,169 @@ const CONFIG = {
             title: 'Growth Journal',
             description: 'Capture your baby\'s growth journey with photos',
             action: 'showJournalTracker'
+        },
+        {
+            id: 'hospitalFinder',
+            icon: '🏥',
+            title: 'Nearest Hospital',
+            description: 'Find nearby hospitals and vaccination centers',
+            action: 'showHospitalFinder'
+        }
+    ],
+
+    // Hospital finder data
+    hospitals: [
+        {
+            id: 1,
+            name: 'Government General Hospital',
+            type: 'government',
+            address: '123 Medical Street, Delhi',
+            distance: 0.8,
+            contactNumber: '+91-11-2345-6789',
+            rating: 4.2,
+            cost: {
+                consultation: 50,
+                vaccination: 0,
+                emergency: 100
+            },
+            services: ['Emergency', 'Pediatrics', 'Vaccination', 'Maternity'],
+            facilities: ['24/7 Emergency', 'Pediatric ICU', 'Vaccination Center', 'Ambulance'],
+            doctorsCount: 15,
+            beds: 200,
+            workingHours: '24/7'
+        },
+        {
+            id: 2,
+            name: 'City Children\'s Hospital',
+            type: 'private',
+            address: '456 Health Avenue, Delhi',
+            distance: 1.2,
+            contactNumber: '+91-11-9876-5432',
+            rating: 4.8,
+            cost: {
+                consultation: 800,
+                vaccination: 300,
+                emergency: 2000
+            },
+            services: ['Emergency', 'Pediatrics', 'Vaccination', 'Neonatal Care'],
+            facilities: ['NICU', 'Pediatric Surgery', 'Vaccination Center', 'Pharmacy'],
+            doctorsCount: 25,
+            beds: 120,
+            workingHours: '24/7'
+        },
+        {
+            id: 3,
+            name: 'Metro Vaccination Center',
+            type: 'vaccination',
+            address: '789 Wellness Road, Delhi',
+            distance: 0.5,
+            contactNumber: '+91-11-1111-2222',
+            rating: 4.5,
+            cost: {
+                consultation: 200,
+                vaccination: 150,
+                emergency: 500
+            },
+            services: ['Vaccination', 'Pediatrics', 'Health Checkup'],
+            facilities: ['Vaccination Center', 'Child Health Clinic', 'Pharmacy'],
+            doctorsCount: 8,
+            beds: 20,
+            workingHours: '9 AM - 6 PM'
+        },
+        {
+            id: 4,
+            name: 'Apollo Children\'s Hospital',
+            type: 'private',
+            address: '321 Medical Complex, Delhi',
+            distance: 2.1,
+            contactNumber: '+91-11-3333-4444',
+            rating: 4.9,
+            cost: {
+                consultation: 1200,
+                vaccination: 500,
+                emergency: 3000
+            },
+            services: ['Emergency', 'Pediatrics', 'Vaccination', 'Specialized Care'],
+            facilities: ['Pediatric ICU', 'NICU', 'Vaccination Center', 'Specialized Units'],
+            doctorsCount: 40,
+            beds: 180,
+            workingHours: '24/7'
+        },
+        {
+            id: 5,
+            name: 'District Health Center',
+            type: 'government',
+            address: '654 Public Health Lane, Delhi',
+            distance: 1.8,
+            contactNumber: '+91-11-5555-6666',
+            rating: 3.8,
+            cost: {
+                consultation: 30,
+                vaccination: 0,
+                emergency: 50
+            },
+            services: ['Emergency', 'Pediatrics', 'Vaccination', 'Maternity'],
+            facilities: ['Emergency Ward', 'Vaccination Center', 'Maternity Ward', 'Pharmacy'],
+            doctorsCount: 12,
+            beds: 150,
+            workingHours: '8 AM - 8 PM'
+        },
+        {
+            id: 6,
+            name: 'Fortis Children\'s Clinic',
+            type: 'private',
+            address: '987 Premium Health Plaza, Delhi',
+            distance: 2.8,
+            contactNumber: '+91-11-7777-8888',
+            rating: 4.7,
+            cost: {
+                consultation: 1000,
+                vaccination: 400,
+                emergency: 2500
+            },
+            services: ['Emergency', 'Pediatrics', 'Vaccination', 'Specialized Care'],
+            facilities: ['Pediatric Emergency', 'Vaccination Center', 'Diagnostic Lab', 'Pharmacy'],
+            doctorsCount: 30,
+            beds: 100,
+            workingHours: '24/7'
+        },
+        {
+            id: 7,
+            name: 'Community Vaccination Hub',
+            type: 'vaccination',
+            address: '147 Community Center, Delhi',
+            distance: 0.3,
+            contactNumber: '+91-11-9999-0000',
+            rating: 4.3,
+            cost: {
+                consultation: 100,
+                vaccination: 50,
+                emergency: 200
+            },
+            services: ['Vaccination', 'Health Checkup', 'Consultation'],
+            facilities: ['Vaccination Center', 'Health Clinic', 'Waiting Area'],
+            doctorsCount: 5,
+            beds: 10,
+            workingHours: '10 AM - 5 PM'
+        },
+        {
+            id: 8,
+            name: 'Max Super Speciality Hospital',
+            type: 'private',
+            address: '258 Super Speciality Road, Delhi',
+            distance: 3.5,
+            contactNumber: '+91-11-2222-3333',
+            rating: 4.9,
+            cost: {
+                consultation: 1500,
+                vaccination: 600,
+                emergency: 4000
+            },
+            services: ['Emergency', 'Pediatrics', 'Vaccination', 'Super Speciality'],
+            facilities: ['Pediatric ICU', 'NICU', 'Vaccination Center', 'Advanced Diagnostics'],
+            doctorsCount: 50,
+            beds: 300,
+            workingHours: '24/7'
         }
     ],
 

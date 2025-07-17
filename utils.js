@@ -174,6 +174,10 @@ const Utils = {
                 } catch (e) {
                     return false;
                 }
+            },
+            tel: () => {
+                // Check if device supports tel: links
+                return Utils.browser.isMobile() || navigator.platform.indexOf('Mac') > -1;
             }
         },
         
